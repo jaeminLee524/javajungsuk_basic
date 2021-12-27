@@ -1,4 +1,6 @@
 import java.io.*;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.stream.*;
 
 class Ex14_6 {
@@ -6,22 +8,59 @@ class Ex14_6 {
 		File[] fileArr = { new File("Ex1.java"), new File("Ex1.bak"),
 			new File("Ex2.java"), new File("Ex1"), new File("Ex1.txt")
 		};
+		
+		// íŒŒì¼ ë°°ì—´ì—ì„œ íŒŒì¼ í™•ì¥ì(ëŒ€ë¬¸ì)ë¥¼ ì¤‘ë³µì—†ì´ ë½‘ì•„ë‚´ê¸°
+		// 1.Stream ìƒì„±
+//		Stream<File> fileStream = Stream.of(fileArr);
+//		fileStream.map((File f) -> f.getName()).forEach(s -> System.out.println(s));
+		
+		// 1.Stream ìƒì„±
+		Stream<File> fileStream2 = Stream.of(fileArr);
+		// 2.Fileì˜ ì´ë¦„ êº¼ë‚´ ìƒˆë¡œìš´ Streamìƒì„±
+		fileStream2.map(f -> f.getName())
+			// 2.í™•ì¥ìê°€ ì—†ëŠ”ê±´ ì œì™¸ 
+			.filter(s -> s.indexOf('.')!=-1)
+			.peek(s -> System.out.printf("fileName=%s%n", s))
+			// 3.í™•ì¥ì ë’·ë¶€ë¶„ë§Œ map
+			.map(s -> s.substring(s.indexOf('.')+1))
+			.peek(s -> System.out.printf("'.'ì œê±°ëœname=%s%n",s))
+			// 4.ëŒ€ë¬¸ìë¡œ
+			.map(s -> s.toUpperCase())
+			// ì¤‘ë³µ ì—†ì´
+			.distinct()
+			// ì¶œë ¥
+			.forEach(s -> System.out.println(s));
 
-		Stream<File> fileStream = Stream.of(fileArr);
 
-		// map()À¸·Î Stream<File>À» Stream<String>À¸·Î º¯È¯
-		Stream<String> filenameStream = fileStream.map(File::getName);
-		filenameStream.forEach(System.out::println); // ¸ğµç ÆÄÀÏÀÇ ÀÌ¸§À» Ãâ·Â
+		
+				
+		
+		 
+		
+		
+//		int count = (int)fileStream.map(f -> f.getName()).filter(s -> s.indexOf('.')!= -1).count();
+//		fileStream.map(f -> f.getName()).filter(s -> s.indexOf('.')!= -1).forEach(s -> System.out.println(s));
+//		fileStream.map(f -> f.getName()).forEach(s -> System.out.println(s));
+		
+		// íŒŒì¼ ìŠ¤íŠ¸ë¦¼ì—ì„œ íŒŒì¼ í™•ì¥ì(ëŒ€ë¬¸ì)ë¥¼ ì¤‘ë³µì—†ì´ ë½‘ì•„ë‚´ê¸°
+		
+		
 
-		fileStream = Stream.of(fileArr);  // ½ºÆ®¸²À» ´Ù½Ã »ı¼º
-
-		fileStream.map(File::getName)     // Stream<File> ¡æ Stream<String>
-			  .filter(s -> s.indexOf('.')!=-1)   // È®ÀåÀÚ°¡ ¾ø´Â °ÍÀº Á¦¿Ü
-			  .map(s -> s.substring(s.indexOf('.')+1)) // È®ÀåÀÚ¸¸ ÃßÃâ
-			  .map(String::toUpperCase)     // ¸ğµÎ ´ë¹®ÀÚ·Î º¯È¯
-			  .distinct()                   //  Áßº¹ Á¦°Å
-			  .forEach(System.out::print);  // JAVABAKTXT	
-
-		System.out.println();
+//		Stream<File> fileStream = Stream.of(fileArr);
+//
+//		// map()ï¿½ï¿½ï¿½ï¿½ Stream<File>ï¿½ï¿½ Stream<String>ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+//		Stream<String> filenameStream = fileStream.map(File::getName);
+//		filenameStream.forEach(System.out::println); // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+//
+//		fileStream = Stream.of(fileArr);  // ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//
+//		fileStream.map(File::getName)     // Stream<File> ï¿½ï¿½ Stream<String>
+//			  .filter(s -> s.indexOf('.')!=-1)   // È®ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//			  .map(s -> s.substring(s.indexOf('.')+1)) // È®ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½
+//			  .map(String::toUpperCase)     // ï¿½ï¿½ï¿½ ï¿½ë¹®ï¿½Ú·ï¿½ ï¿½ï¿½È¯
+//			  .distinct()                   //  ï¿½ßºï¿½ ï¿½ï¿½ï¿½ï¿½
+//			  .forEach(System.out::print);  // JAVABAKTXT	
+//
+//		System.out.println();
 	}
 }
